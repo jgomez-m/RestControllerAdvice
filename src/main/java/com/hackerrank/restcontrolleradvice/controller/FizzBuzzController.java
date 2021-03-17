@@ -21,15 +21,16 @@ public class FizzBuzzController {
 
 
     if (FizzBuzzEnum.FIZZ.getValue().equals(code)) {
-      throw new FizzException("Fizz Exception has been thrown", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+      throw new FizzException(
+              "Fizz Exception has been thrown", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
 
     } else if (FizzBuzzEnum.BUZZ.getValue().equals(code)) {
       throw new BuzzException(
-              "Fizz Exception has been thrown", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+              "Buzz Exception has been thrown", HttpStatus.BAD_REQUEST.getReasonPhrase());
     } else if (FizzBuzzEnum.FIZZBUZZ.getValue().equals(code)) {
-      throw new FizzException(
-              "Fizz Exception has been thrown", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+      throw new FizzBuzzException(
+              "FizzBuzz Exception has been thrown", HttpStatus.INSUFFICIENT_STORAGE.getReasonPhrase());
     }
-    return ResponseEntity.ok(new FizzBuzzResponse("", HttpStatus.OK.value()));
+    return ResponseEntity.ok(new FizzBuzzResponse("Successfully completed fizzbuzz test", HttpStatus.OK.value()));
   }
 }

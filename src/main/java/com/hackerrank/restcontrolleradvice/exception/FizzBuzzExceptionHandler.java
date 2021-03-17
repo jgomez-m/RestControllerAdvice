@@ -13,24 +13,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class FizzBuzzExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({FizzBuzzException.class, BuzzException.class, FizzBuzzException.class})
-    public ResponseEntity<Object> handleExceptions(RuntimeException exception) {
-        ResponseEntity<Object> response = null;
+    @ExceptionHandler({FizzException.class, BuzzException.class, FizzBuzzException.class})
+    public ResponseEntity<GlobalError> handleExceptions(RuntimeException exception) {
+
         if (exception instanceof FizzException) {
-            response = handleExceptionInternal(exception,
-                    new FizzBuzzResponse("Fizz Exception has been thrown", HttpStatus.INTERNAL_SERVER_ERROR.value()),
-                    new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+            return new ResponseEntity<>(new GlobalError(
+                    exception.getMessage(),((FizzException) exception).getErrorReason()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
 
         } else if (exception instanceof BuzzException) {
-            response = handleExceptionInternal(new BuzzException("Buzz Exception has been thrown", HttpStatus.BAD_REQUEST.getReasonPhrase()),
-                    new FizzBuzzResponse("Fizz Exception has been thrown", HttpStatus.BAD_REQUEST.value()),
-                    new HttpHeaders(), HttpStatus.BAD_REQUEST, null);
+            return new ResponseEntity<>(new GlobalError(
+                    exception.getMessage(), ((BuzzException) exception).getErrorReason()),
+                    HttpStatus.BAD_REQUEST);
 
         } else if (exception instanceof FizzBuzzException) {
-            response = handleExceptionInternal(new FizzBuzzException("FizzBuzz Exception has been thrown", HttpStatus.INSUFFICIENT_STORAGE.getReasonPhrase()),
-                    new FizzBuzzResponse("Fizz Exception has been thrown", HttpStatus.INSUFFICIENT_STORAGE.value()),
-                    new HttpHeaders(), HttpStatus.INSUFFICIENT_STORAGE, null);
+            return new ResponseEntity<>(new GlobalError(
+                    exception.getMessage(), ((FizzBuzzException) exception).getErrorReason()),
+                    HttpStatus.INSUFFICIENT_STORAGE);
         }
-        return response;
+        return null;
     }
 }
